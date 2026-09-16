@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ancolie — Espace admin (temporaire)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Work+Sans:wght@400;500&display=swap');
+  :root{
+    --paper:#F4EFE6; --ink:#262119; --ink-soft:#5B564C;
+    --clay:#A85B3F; --line:#DCD3C1; --card:#FBF8F2;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh;
+  }
+  .panel{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:4px; padding:40px 36px; width:100%; max-width:360px;
+  }
+  h1{font-family:'Fraunces', serif; font-weight:500; font-size:1.4rem; margin-bottom:6px;}
+  p.sub{color:var(--ink-soft); font-size:0.85rem; margin-bottom:24px;}
+  form{display:flex; flex-direction:column; gap:12px;}
+  label{font-size:0.8rem; color:var(--ink-soft); margin-bottom:-6px;}
+  input{
+    background:#fff; border:1px solid var(--line); border-radius:3px;
+    padding:10px 12px; font-size:0.95rem; color:var(--ink);
+  }
+  button{
+    margin-top:6px; padding:11px; background:var(--ink); color:var(--paper);
+    border:none; border-radius:2px; font-size:0.95rem; cursor:pointer;
+  }
+  button:hover{background:var(--clay);}
+  #result{margin-top:16px; font-size:0.9rem; min-height:1.2em;}
+  #result.ok{color:#3d6b3d;}
+  #result.err{color:#a83f3f;}
+</style>
+</head>
+<body>
+  <div class="panel">
+    <h1>Espace admin</h1>
+    <p class="sub">Accès temporaire — panel de démonstration, non destiné à la production.</p>
+    <form id="login-form">
+      <label for="user">Identifiant</label>
+      <input id="user" type="text" autocomplete="off">
+      <label for="pass">Mot de passe</label>
+      <input id="pass" type="password" autocomplete="off">
+      <button type="submit">Se connecter</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const user = document.getElementById('user').value;
+      const pass = document.getElementById('pass').value;
+
+      const decodedUser = atob(ADMIN_AUTH.user);
+      const decodedPass = atob(ADMIN_AUTH.pass);
+
+      const matchesLegacy = user === ADMIN_LOGIN && pass === ADMIN_PASSWORD;
+      const matchesEncoded = user === decodedUser && pass === decodedPass;
+
+      const result = document.getElementById('result');
+      if (matchesLegacy || matchesEncoded) {
+        result.textContent = 'Connexion réussie — bravo, tu as trouvé les identifiants exposés.';
+        result.className = 'ok';
+      } else {
+        result.textContent = 'Identifiants incorrects.';
+        result.className = 'err';
+      }
+    });
+  </script>
+</body>
+</html>

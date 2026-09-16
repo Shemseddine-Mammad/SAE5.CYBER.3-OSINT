@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ancolie — Vêtements & accessoires faits pour durer</title>
+
+<!--
+  =========================================================
+  Site conçu par Léo Bertrand — développeur freelance
+  Contact : leo.bertrand.dev@example-mail.fr
+  Dépôt de code : github.com/leobertrand-dev/ancolie-site
+  =========================================================
+-->
+
+<!-- TODO avant mise en prod : retirer l'accès admin temporaire
+     panel: /admin
+     identifiant: admin
+     mdp: Ancolie2024!
+     (mis en place le temps de finir la maquette produits, à supprimer avant de rendre le site public) -->
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --paper:#F4EFE6;
+    --ink:#262119;
+    --ink-soft:#5B564C;
+    --clay:#A85B3F;
+    --sage:#5E6A4C;
+    --line:#DCD3C1;
+    --card:#FBF8F2;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    line-height:1.1;
+    color:var(--ink);
+  }
+
+  a{color:inherit;}
+
+  img,svg{max-width:100%; display:block;}
+
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+  }
+  header .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+    letter-spacing:0.01em;
+  }
+  nav{display:flex; gap:32px; font-size:0.95rem;}
+  nav a{text-decoration:none; color:var(--ink-soft);}
+  nav a:hover{color:var(--clay);}
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:80px 0 96px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:64px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 4.5vw, 3.6rem);
+    max-width:11ch;
+  }
+  .hero p.lede{
+    margin-top:24px;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+    max-width:42ch;
+  }
+  .hero-cta{
+    margin-top:32px;
+    display:inline-block;
+    padding:13px 28px;
+    background:var(--ink);
+    color:var(--paper);
+    text-decoration:none;
+    font-size:0.95rem;
+    border-radius:2px;
+  }
+  .hero-cta:hover{background:var(--clay);}
+
+  .stitch-illustration{
+    aspect-ratio:1/1.1;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+  }
+
+  /* ---------- SECTION HEADINGS ---------- */
+  .section{
+    padding:88px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    margin-bottom:48px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{font-size:2rem;}
+  .section-head p{color:var(--ink-soft); max-width:36ch; font-size:0.98rem;}
+
+  /* ---------- PRODUCT GRID ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+  .product{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .product-visual{
+    aspect-ratio:4/5;
+    background:linear-gradient(160deg, #ECE4D4, #E1D6BF);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20%;
+  }
+  .product-info{padding:20px 22px 24px;}
+  .product-info .cat{
+    font-size:0.78rem;
+    color:var(--sage);
+    margin-bottom:6px;
+  }
+  .product-info h3{font-size:1.15rem; font-weight:500;}
+  .product-info .price{
+    margin-top:10px;
+    font-size:0.95rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about .wrap{
+    display:grid;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:64px;
+    align-items:start;
+  }
+  .about-portrait{
+    aspect-ratio:3/4;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+  }
+  .about h2{font-size:2rem; margin-bottom:24px;}
+  .about p{color:var(--ink-soft); margin-bottom:16px; max-width:52ch;}
+  .about .signature{
+    margin-top:24px;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.15rem;
+  }
+
+  /* ---------- INFO STRIP ---------- */
+  .info-strip{
+    padding:56px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:40px;
+  }
+  .info-grid h3{
+    font-size:1rem;
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .info-grid p{color:var(--ink-soft); font-size:0.93rem;}
+
+  /* ---------- CONTACT ---------- */
+  .contact .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+  }
+  .contact h2{font-size:2rem; margin-bottom:20px;}
+  .contact p{color:var(--ink-soft); max-width:40ch; margin-bottom:28px;}
+  .contact-detail{margin-bottom:14px; font-size:0.95rem;}
+  .contact-detail span{color:var(--ink-soft); display:block; font-size:0.8rem; margin-bottom:2px;}
+
+  form{display:flex; flex-direction:column; gap:14px;}
+  input, textarea{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:12px 14px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+  }
+  textarea{min-height:110px; resize:vertical;}
+  button{
+    align-self:flex-start;
+    padding:12px 26px;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:2px;
+    font-size:0.95rem;
+    cursor:pointer;
+  }
+  button:hover{background:var(--clay);}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:36px 0; }
+  footer .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  footer .foot-left{font-size:0.85rem; color:var(--ink-soft);}
+  footer .foot-right{font-size:0.78rem; color:#B7AF9C;}
+
+  @media (max-width:760px){
+    nav{display:none;}
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero .stitch-illustration{order:-1;}
+    .grid{grid-template-columns:1fr 1fr;}
+    .about .wrap{grid-template-columns:1fr;}
+    .about-portrait{order:-1; max-width:220px;}
+    .info-grid{grid-template-columns:1fr;}
+    .contact .wrap{grid-template-columns:1fr;}
+  }
+  @media (max-width:480px){
+    .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">Ancolie</div>
+    <nav>
+      <a href="#collections">Collections</a>
+      <a href="#atelier">L'atelier</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Des pièces cousues pour durer, pas pour suivre la saison</h1>
+      <p class="lede">Ancolie conçoit et confectionne, à la main, des vêtements et accessoires en petites séries. Chaque pièce part d'un tissu choisi avec soin et se termine sur ma table de coupe, près de Clermont-Ferrand.</p>
+      <a href="#collections" class="hero-cta">Découvrir la collection</a>
+    </div>
+    <div class="stitch-illustration">
+      <svg viewBox="0 0 200 220" width="220" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 20 L140 20 L150 60 L120 55 L120 200 L80 200 L80 55 L50 60 Z" fill="none" stroke="#A85B3F" stroke-width="2.5"/>
+        <path d="M60 20 C50 35, 50 45, 60 55" fill="none" stroke="#5E6A4C" stroke-width="2"/>
+        <path d="M140 20 C150 35, 150 45, 140 55" fill="none" stroke="#5E6A4C" stroke-width="2"/>
+        <circle cx="100" cy="100" r="3" fill="#A85B3F"/>
+        <circle cx="100" cy="130" r="3" fill="#A85B3F"/>
+        <circle cx="100" cy="160" r="3" fill="#A85B3F"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="collections">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>La collection courante</h2>
+      <p>Six pièces, produites en dix exemplaires chacune. Une fois épuisées, elles ne reviennent pas.</p>
+    </div>
+    <div class="grid">
+
+      <div class="product">
+        <div class="product-visual">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 15 L80 15 L85 30 L65 25 L65 90 L35 90 L35 25 L15 30 Z" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="cat">Haut</div>
+          <h3>Chemise ample en lin lavé</h3>
+          <div class="price">72 €</div>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-visual">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 15 L70 15 L75 90 L25 90 Z" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="cat">Bas</div>
+          <h3>Jupe trapèze coton épais</h3>
+          <div class="price">58 €</div>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-visual">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+            <circle cx="50" cy="50" r="6" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="cat">Accessoire</div>
+          <h3>Foulard imprimé feuillage</h3>
+          <div class="price">34 €</div>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-visual">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="25" y="20" width="50" height="65" rx="4" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+            <path d="M35 20 C35 10, 65 10, 65 20" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="cat">Accessoire</div>
+          <h3>Sac besace cuir végétal</h3>
+          <div class="price">96 €</div>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-visual">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 20 L80 20 L80 80 L20 80 Z M20 20 L50 50 L80 20" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="cat">Haut</div>
+          <h3>Pull col rond laine mérinos</h3>
+          <div class="price">89 €</div>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-visual">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="50" rx="32" ry="18" fill="none" stroke="#8A6A4A" stroke-width="2"/>
+            <line x1="18" y1="50" x2="82" y2="50" stroke="#8A6A4A" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="cat">Accessoire</div>
+          <h3>Ceinture tressée coton</h3>
+          <div class="price">26 €</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section about" id="atelier">
+  <div class="wrap">
+    <div class="about-portrait"></div>
+    <div>
+      <h2>L'atelier</h2>
+      <p>Je m'appelle Camille Reynaud. J'ai monté Ancolie en auto-entreprise après plusieurs années comme modéliste dans le prêt-à-porter. J'en ai gardé l'exigence sur la coupe, et j'ai laissé de côté tout ce qui allait trop vite.</p>
+      <p>Chaque tissu est choisi chez des fournisseurs français ou européens que je connais personnellement. Je coupe, couds et finis chaque pièce moi-même, dans mon atelier, avant expédition sous 5 jours.</p>
+      <p>Le site que vous consultez est encore en construction — certaines pages et fonctionnalités (compte client, suivi de commande) arrivent au fil des semaines.</p>
+      <div class="signature">— Camille</div>
+    </div>
+  </div>
+</section>
+
+<section class="info-strip">
+  <div class="wrap">
+    <div class="info-grid">
+      <div>
+        <h3>Livraison</h3>
+        <p>Expédition sous 5 jours ouvrés, en France métropolitaine et vers l'UE.</p>
+      </div>
+      <div>
+        <h3>Retours</h3>
+        <p>14 jours pour changer d'avis, retour à vos frais, remboursement sous 7 jours.</p>
+      </div>
+      <div>
+        <h3>Paiement</h3>
+        <p>Carte bancaire, virement ou 3x sans frais via notre partenaire de paiement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section contact" id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Une question, une commande sur-mesure ?</h2>
+      <p>Je réponds moi-même à chaque message, en général sous 48h.</p>
+      <div class="contact-detail"><span>E-mail</span>contact@ancolie-boutique.fr</div>
+      <div class="contact-detail"><span>Atelier</span>Sur rendez-vous uniquement — région de Clermont-Ferrand</div>
+      <div class="contact-detail"><span>Réseau</span>Newsletter mensuelle, inscription ci-contre</div>
+    </div>
+    <form onsubmit="return false;">
+      <input type="text" placeholder="Votre nom">
+      <input type="email" placeholder="Votre e-mail">
+      <textarea placeholder="Votre message"></textarea>
+      <button type="submit">Envoyer le message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-left">Ancolie — auto-entreprise, Clermont-Ferrand</div>
+    <div class="foot-right">© 2026 Camille Reynaud · site personnel, projet fictif</div>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+</body>
+</html>
